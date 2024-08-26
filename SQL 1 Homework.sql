@@ -8,8 +8,6 @@
 Write a query that retrieves the columns CustomerID, ContactName, City and Region 
 from the Customers table, with no filter. 
 */
-USE Northwind
-GO
 
 SELECT CustomerID,ContactName,City,Region
 FROM Customers
@@ -20,8 +18,9 @@ FROM Customers
 Write a query that retrieves the columns CustomerID, ContactName, City, Region, PostalCode
 from the Customers table, the rows that start with numbers for the column PostalCode
 */
-SELECT PostalCode, CustomerID, ContactName, City, Region
+SELECT CustomerID, ContactName, City, Region, PostalCode
 FROM Customers
+WHERE PostalCode LIKE '[0-9]%'
 
 /* Query 3
 Write a query that retrieves the columns CustomerID, ContactName, City and Region 
@@ -76,11 +75,12 @@ NAME: Karl Jablonski -- TITLE: Owner
 -- 1. With All Title
 SELECT CONCAT('NAME: ',ContactName, ' -- TITLE: ',ContactTitle) AS Result
 FROM Customers
+WHERE Region IS NOT NULL
 
 -- 2. Only With Owner Title
 SELECT CONCAT('NAME: ',ContactName, ' -- TITLE: ',ContactTitle) AS Result
 FROM Customers
-WHERE ContactTitle = 'Owner'
+WHERE ContactTitle = 'Owner' AND Region IS NOT NULL
 
 /* Query 8
 Write a query to retrieve the to the columns ProductID and ProductName 
@@ -122,6 +122,7 @@ Steeleye Stout										18.00
 */
 SELECT ProductName AS Name, UnitPrice AS ListPrice
 FROM Products
+WHERE ProductName LIKE 'S%'
 ORDER BY ProductName
 
 /* Query 12
