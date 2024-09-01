@@ -189,42 +189,67 @@ WHERE r.RegionDescription = 'Eastern' OR r.RegionDescription = 'Northern'
 /* Query 14
 List all Products that has been sold at least once in last 25 years.
 */
-
+SELECT DISTINCT p.ProductID, p.ProductName
+FROM Products p
+JOIN [Order Details] od ON p.ProductID = od.ProductID
+JOIN Orders o ON od.OrderID = o.OrderID
+WHERE YEAR(o.OrderDate) >= YEAR(GETDATE())-25;
 
 
 /* Query 15
 List top 5 locations (Zip Code) where the products sold most.
 */
-
+SELECT TOP 5 o.ShipPostalCode, COUNT(*) AS TotalSales
+FROM Orders o
+JOIN [Order Details] od ON o.OrderID = od.OrderID
+GROUP BY o.ShipPostalCode
+ORDER BY TotalSales DESC
 
 
 /* Query 16
 List top 5 locations (Zip Code) where the products sold most in last 25 years.
 */
-
+SELECT TOP 5 o.ShipPostalCode, COUNT(*) AS TotalSales
+FROM Orders o
+JOIN [Order Details] od ON o.OrderID = od.OrderID
+WHERE o.OrderDate >= DATEADD(YEAR,-25,GETDATE())
+GROUP BY o.ShipPostalCode
+ORDER BY TotalSales DESC
 
 
 /* Query 17
 List all city names and number of customers in that city. 
 */
-
+SELECT City, COUNT(*) AS ToTalCustomerNumbers
+FROM Customers
+GROUP BY City
 
 
 /* Query 18
 List city names which have more than 2 customers, and number of customers in that city 
 */
+SELECT City, COUNT(*) AS ToTalCustomerNumbers
+FROM Customers
+GROUP BY City
+HAVING COUNT(*) > 2
 
 
 /* Query 19
 List the names of customers who placed orders after 1/1/98 with order date.
 */
-
+SELECT c.ContactName
+FROM Customers c
+JOIN Orders o ON o.CustomerID = c.CustomerID
+WHERE o.OrderDate > '1998-01-01'
 
 
 /* Query 20
 List the names of all customers with most recent order dates 
 */
-
+SELECT TOP 1 c.ContactName, MAX(o.OrderDate) AS MostRecentOrder
+FROM Customers c
+JOIN Orders o ON o.CustomerID = c.CustomerID
+GROUP BY ContactName
 
 
 /* Query 21
