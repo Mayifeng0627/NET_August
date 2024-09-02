@@ -255,13 +255,21 @@ GROUP BY ContactName
 /* Query 21
 Display the names of all customers along with the count of products they bought
 */
-
+SELECT c.ContactName, SUM(od.Quantity) AS TotalProductsBought
+FROM Customers c
+JOIN Orders o ON c.CustomerID = o.CustomerID
+JOIN [Order Details] od ON o.OrderID = od.OrderID
+GROUP BY c.ContactName
 
 
 /* Query 22
 Display the customer ids who bought more than 100 Products with count of products.
 */
-
+SELECT o.CustomerID, SUM(od.Quantity) AS TotalProductsBought
+FROM Orders o
+JOIN [Order Details] od ON o.OrderID = od.OrderID
+GROUP BY o.CustomerID
+HAVING SUM(od.Quantity) > 100
 
 
 /* Query 23
@@ -269,13 +277,20 @@ List all of the possible ways that suppliers can ship their products. Display th
 Supplier Company Name   	Shipping Company Name
 ----------------------      ----------------------------------
 */
-
+SELECT su.CompanyName AS [Supplier Company Name], sh.CompanyName AS [Shipping Company Name]
+FROM Suppliers su
+CROSS JOIN Shippers sh
+ORDER BY 1
 
 
 /* Query 24
 Display the products order each day. Show Order date and Product Name.
 */
-
+SELECT o.OrderDate, p.ProductName
+FROM Orders o
+JOIN [Order Details] od ON o.OrderID = od.OrderID
+JOIN Products p ON od.ProductID = p.ProductID
+ORDER BY o.OrderDate
 
 
 /* Query 25
